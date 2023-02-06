@@ -1,0 +1,4 @@
+---
+- hosts: db.yml
+  roles:
+     - mysql

@@ -10,7 +10,7 @@
 
 # Setup/install tasks.
 - include_tasks: setup-RedHat.yml
-  when: ansible_os_family == 'RedHat' or ansible_os_family == 'Rocky' or ansible_os_family == 'AlmaLinux'
+  when: ansible_os_family == 'RedHat'
 
 - include_tasks: setup-Ubuntu.yml
   when: ansible_distribution == 'Ubuntu'
@@ -30,8 +30,22 @@
 # Vhost configuration.
 - import_tasks: vhosts.yml
 
+
+- name: set websevers name in /etc/hosts
+  become: yes
+  blockinfile:
+    path: /etc/hosts
+    block: |
+    {{item.ip}} {{item.name}}
+
+  loop:
+    - {name: web1, ip:172.31.90.208}
+    - {name: web2, ip:172.31.86.154}
+
+
 # Nginx setup.
 - name: Copy nginx configuration in place.
+  become: true
   template:
     src: "{{ nginx_conf_template }}"
     dest: "{{ nginx_conf_file_path }}"
@@ -42,6 +56,7 @@
     - reload nginx
 
 - name: Ensure nginx service is running as configured.
+  become: true
   service:
     name: nginx
     state: "{{ nginx_service_state }}"

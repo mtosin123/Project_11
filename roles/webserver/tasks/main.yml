@@ -33,4 +33,4 @@
   become: true
   ansible.builtin.file:
     path: /var/www/html/html
-    state: absent for webserver
+    state: absent
