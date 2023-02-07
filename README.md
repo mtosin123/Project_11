@@ -29,74 +29,51 @@ site.yml freestyle
 
 
 
+<!-- ---
+# Variable setup.
+- name: Include OS-specific variables.
+  include_vars: "{{ ansible_os_family }}.yml"
 
+- name: Define nginx_user.
+  set_fact:
+    nginx_user: "{{ __nginx_user }}"
+  when: nginx_user is not defined
 
+# Setup/install tasks.
+- include_tasks: setup-RedHat.yml
+  when: ansible_os_family == 'RedHat' or ansible_os_family == 'Rocky' or ansible_os_family == 'AlmaLinux'
 
+- include_tasks: setup-Ubuntu.yml
+  when: ansible_distribution == 'Ubuntu'
 
+- include_tasks: setup-Debian.yml
+  when: ansible_os_family == 'Debian'
 
+- include_tasks: setup-FreeBSD.yml
+  when: ansible_os_family == 'FreeBSD'
 
-<!-- 
-######## JENKINS FILE FOR QUICK TASK ########
-================================================
-project 11 new
-adjusted now
-new nw
+- include_tasks: setup-OpenBSD.yml
+  when: ansible_os_family == 'OpenBSD'
 
-######## JENKINS FILE FOR QUICK TASK ########
-================================================
-pipeline {
-    agent any
+- include_tasks: setup-Archlinux.yml
+  when: ansible_os_family == 'Archlinux'
 
-  stages {
+# Vhost configuration.
+- import_tasks: vhosts.yml
 
-    stage("Initial cleanup") {
-          steps {
-            dir("${WORKSPACE}") {
-              deleteDir()
-            }
-          }
-        }
+# Nginx setup.
+- name: Copy nginx configuration in place.
+  template:
+    src: "{{ nginx_conf_template }}"
+    dest: "{{ nginx_conf_file_path }}"
+    owner: root
+    group: "{{ root_group }}"
+    mode: 0644
+  notify:
+    - reload nginx
 
-    stage('Build') {
-      steps {
-        script {
-          sh 'echo "Building Stage"'
-        }
-      }
-    }
-
-    stage('Test') {
-      steps {
-        script {
-          sh 'echo "Testing Stage"'
-        }
-      }
-    }
-    stage('Package') {
-      steps {
-        script {
-          sh 'echo "Packaging"'
-        }
-      }
-    }
-    stage('Deploy') {
-      steps {
-        script {
-          sh 'echo "Deploying"'
-        }
-      }
-    }
-    stage('Clean up') {
-      steps {
-        script {
-          sh 'echo "Staging"'
-        }
-      }
-    }
-    stage('Clean Workspace after build'){
-        steps{
-          cleanWs(cleanWhenAborted: true, cleanWhenFailure: true, cleanWhenNotBuilt: true, cleanWhenUnstable: true, deleteDirs: true)
-        }
-    }
-    }
-} -- -->
+- name: Ensure nginx service is running as configured.
+  service:
+    name: nginx
+    state: "{{ nginx_service_state }}"
+    enabled: "{{ nginx_service_enabled }}" -->
