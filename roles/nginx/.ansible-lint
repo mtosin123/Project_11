@@ -1,3 +1,5 @@
+---
 skip_list:
-  - 'yaml'
-  - 'role-name'
+  - args[module]
+  - name[template]
+  - yaml[line-length]
