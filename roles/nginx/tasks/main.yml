@@ -62,9 +62,9 @@
     block: |
     {{item.ip}} {{item.name}}
 
-  loop:
-    - {name: web1, ip:172.31.90.208}
-    - {name: web2, ip:172.31.86.154}
+  # loop:
+  #   - {name: web1, ip:172.31.90.208}
+  #   - {name: web2, ip:172.31.86.154}
 
 
 # Nginx setup.
