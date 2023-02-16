@@ -61,7 +61,7 @@ nginx_remove_default_vhost: false
 # Listen on IPv6 (default: true)
 nginx_listen_ipv6: true
 
-nginx_vhosts: []
+# nginx_vhosts: []
 # Example vhost below, showing all available options:
 # - listen: "80" # default: "80"
 #   server_name: "example.com" # default: N/A
