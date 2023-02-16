@@ -111,34 +111,13 @@ mysql_databases:
     collation: utf8_general_ci
     encoding: utf8
     replicate: 1
-<<<<<<< HEAD
 
 # Users.
 mysql_users: []
-=======
-
-# mysql databases:
-#   - name: homestead
-#     collation: utf8_general_ci
-#     encoding: utf8
-#     replicate: 1
-
-# Users.
-mysql_users:
->>>>>>> feature/jenkinspipeline-stages
   - name: webaccess
     host: 0.0.0.0
     password: secret
     priv: '*.*:ALL,GRANT'
-<<<<<<< HEAD
-=======
-
-  # mysql_users:
-  # - name: homestead
-  #   host: 172.31.7.254
-  #   password: sePret^i
-  #   priv: '*.*:ALL,GRANT'
->>>>>>> feature/jenkinspipeline-stages
 
 mysql_disable_log_bin: false
 
