@@ -2,4 +2,4 @@
 - hosts: db
   become: true
   roles:
-     - geerlingguy.mysql
+     - mysql
