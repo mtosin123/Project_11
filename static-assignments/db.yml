@@ -1,4 +1,4 @@
 ---
 - hosts: db.yml
   roles:
-     - geerlingguy.mysql
+     - mysql
