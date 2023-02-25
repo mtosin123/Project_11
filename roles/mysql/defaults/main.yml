@@ -117,12 +117,6 @@ mysql_databases:
     collation: utf8_general_ci
     encoding: utf8
     replicate: 
-    
-mysql_users:
-  - name: homestead
-    host: 172.31.94.45
-    password: sePret^i
-    priv: '*.*:ALL,GRANT'
 
 # Users.
 mysql_users:
@@ -130,6 +124,13 @@ mysql_users:
     host: 0.0.0.0
     password: secret
     priv: '*.*:ALL,GRANT'
+    
+mysql_users:
+  - name: homestead
+    host: 172.31.94.45
+    password: sePret^i
+    priv: '*.*:ALL,GRANT'
+
 
 mysql_disable_log_bin: false
 
