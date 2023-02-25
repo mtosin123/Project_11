@@ -1,82 +1,65 @@
-<<<<<<< HEAD
-=======
-project 11 new
-adjusted now
-new nw
+Dependences to be installed
+====================================
 
+yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+yum install -y dnf-utils http://rpms.remirepo.net/enterprise/remi-release-8.rpm
+yum install python3 python3-pip wget unzip git -y
+python3 -m pip install --upgrade setuptools
+python3 -m pip install --upgrade pip
+python3 -m pip install PyMySQL
+python3 -m pip install mysql-connector-python
+python3 -m pip install psycopg2==2.7.5 --ignore-installed
+Installing JAVA
+====================================
 
+sudo yum install java-11-openjdk-devel -y
+open the bash profile
+vi .bash_profile
 
+paste the below in the bash profile
+export JAVA_HOME=$(dirname 
+(readlink 
+(which javac))))) export PATH=$PATH:$JAVA_HOME/bin export CLASSPATH=.:$JAVA_HOME/jre/lib:$JAVA_HOME/lib:$JAVA_HOME/lib/tools.jar
 
-<!-- ############################################
-=======================================================================
-site.yml freestyle
----
-# - hosts: all
-# - name: Include dynamic variables 
-#   tasks:
-#   import_playbook: ../static-assignments/common.yml 
-#   include: ../dynamic-assignments/env-vars.yml
-#   tags:
-#     - always
+reload the bash profile
+source ~/.bash_profile
 
-# -  hosts: webservers
-# - name: Webserver assignment
-#   import_playbook: ../static-assignments/webservers.yml
+Install php
+=====================================
 
- - name: Loadbalancers assignment
-       hosts: lb
-         - import_playbook: ../static-assignments/loadbalancers.yml
-        when: load_balancer_is_required
-======================================================================================== -->
+yum module reset php -y
+yum module enable php:remi-7.4 -y
+yum install -y php php-common php-mbstring php-opcache php-intl php-xml php-gd php-curl php-mysqlnd php-fpm php-json
+systemctl start php-fpm
+systemctl enable php-fpm
+Ansible dependencies to install
+=====================================
 
+For Mysql Database
+ansible-galaxy collection install community.mysql
 
+For Postgresql Database
+ansible-galaxy collection install community.postgresql
 
-<!-- ---
-# Variable setup.
-- name: Include OS-specific variables.
-  include_vars: "{{ ansible_os_family }}.yml"
+Install composer
+=====================================
 
-- name: Define nginx_user.
-  set_fact:
-    nginx_user: "{{ __nginx_user }}"
-  when: nginx_user is not defined
+curl -sS https://getcomposer.org/installer | php
+sudo mv composer.phar /usr/bin/composer
+Verify Composer is installed or not
+composer --version
+Install phpunit, phploc
+=====================================
 
-# Setup/install tasks.
-- include_tasks: setup-RedHat.yml
-  when: ansible_os_family == 'RedHat' or ansible_os_family == 'Rocky' or ansible_os_family == 'AlmaLinux'
+sudo dnf --enablerepo=remi install php-phpunit-phploc
+wget -O phpunit https://phar.phpunit.de/phpunit-7.phar
+chmod +x phpunit
+sudo yum install php-xdebug
+for database connection
+==================================== DB_CONNECTION=mysql DB_PORT=3306
 
-- include_tasks: setup-Ubuntu.yml
-  when: ansible_distribution == 'Ubuntu'
+sudo vi /etc/mysql/mysql.conf.d/mysqld.cnf sudo yum install mysql -y
 
-- include_tasks: setup-Debian.yml
-  when: ansible_os_family == 'Debian'
+Learn how to install Jenkins here
 
-- include_tasks: setup-FreeBSD.yml
-  when: ansible_os_family == 'FreeBSD'
-
-- include_tasks: setup-OpenBSD.yml
-  when: ansible_os_family == 'OpenBSD'
-
-- include_tasks: setup-Archlinux.yml
-  when: ansible_os_family == 'Archlinux'
-
-# Vhost configuration.
-- import_tasks: vhosts.yml
-
-# Nginx setup.
-- name: Copy nginx configuration in place.
-  template:
-    src: "{{ nginx_conf_template }}"
-    dest: "{{ nginx_conf_file_path }}"
-    owner: root
-    group: "{{ root_group }}"
-    mode: 0644
-  notify:
-    - reload nginx
-
-- name: Ensure nginx service is running as configured.
-  service:
-    name: nginx
-    state: "{{ nginx_service_state }}"
-    enabled: "{{ nginx_service_enabled }}" -->
->>>>>>> feature/jenkinspipeline-stages
+Learn how to installk artifactory here
